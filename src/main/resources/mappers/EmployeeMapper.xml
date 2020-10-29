@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ncs_dataio_moon_joonghui.mapper.EmployeeMapper">
+
+	<resultMap type="Employee" id="resEmployee">
+		<id property="empNo" column="EMPNO" />
+		<result property="empName" column="EMPNAME" />
+		<result property="title" column="TITLE" />
+		<result property="manager.empNo" column="MANAGER" />
+		<result property="salary" column="SALARY" />
+		<result property="dept.deptNo" column="DNO" />
+	</resultMap>
+
+ 	<sql id="selectSQL">
+		SELECT EMPNO, EMPNAME, TITLE, MANAGER, SALARY, DNO FROM EMPLOYEE
+	</sql>
+	
+	<sql id="whereSQL">
+		<where>
+			<if test="empNo != null">
+				EMPNO = #{empNo}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectEmployeeAll" resultMap="resEmployee">
+		<include refid="selectSQL"/>
+	</select>
+	
+	<select id="selectEmployeeByNo" resultMap="resEmployee">
+		<include refid="selectSQL"/>
+		<include refid="whereSQL"/>
+	</select>
+	
+ 	<insert id="insertEmployee" parameterType="Employee">
+ 		INSERT INTO EMPLOYEE
+		VALUES (#{empNo}, #{empName}, #{title}, #{manager.empNo}, #{salary}, #{dept.deptNo})
+	</insert>
+	
+	<update id="updateEmployee" parameterType="Employee">
+		UPDATE EMPLOYEE
+		<set>
+			<if test="empName != null">
+				EMPNAME = #{empName},
+			</if>
+			<if test="title != null">
+				TITLE = #{title},
+			</if>
+			<if test="manager.empNo != null">
+				MANAGER = #{manager.empNo},
+			</if>
+			<if test="salary != null">
+				SALARY = #{salary},
+			</if>
+			<if test="dept.deptNo != null">
+				DNO = #{dept.deptNo}
+			</if>
+		</set>
+		<include refid="whereSQL"/>
+	</update>
+	
+	<delete id="deleteEmployee" parameterType="Employee">
+		DELETE FROM EMPLOYEE
+		<include refid="whereSQL"/>
+	</delete>
+	
+</mapper> 
