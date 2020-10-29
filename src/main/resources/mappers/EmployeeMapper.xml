@@ -3,12 +3,12 @@
 <mapper namespace="ncs_dataio_moon_joonghui.mapper.EmployeeMapper">
 
 	<resultMap type="Employee" id="resEmployee">
-		<id property="empNo" column="EMPNO" />
-		<result property="empName" column="EMPNAME" />
-		<result property="title" column="TITLE" />
-		<result property="manager.empNo" column="MANAGER" />
-		<result property="salary" column="SALARY" />
-		<result property="dept.deptNo" column="DNO" />
+		<id property="empNo" column="EMPNO"/>
+		<result property="empName" column="EMPNAME"/>
+		<result property="title" column="TITLE"/>
+		<result property="manager.empNo" column="MANAGER"/>
+		<result property="salary" column="SALARY"/>
+		<result property="dept.deptNo" column="DNO"/>
 	</resultMap>
 
  	<sql id="selectSQL">
@@ -21,6 +21,26 @@
 				EMPNO = #{empNo}
 			</if>
 		</where>
+	</sql>
+	
+	<sql id="setSQL">
+		<set>
+			<if test="empName != null">
+				EMPNAME = #{empName},
+			</if>
+			<if test="title != null">
+				TITLE = #{title},
+			</if>
+			<if test="manager.empNo != null">
+				MANAGER = #{manager.empNo},
+			</if>
+			<if test="salary != null">
+				SALARY = #{salary},
+			</if>
+			<if test="dept.deptNo != null">
+				DNO = #{dept.deptNo}
+			</if>
+		</set>
 	</sql>
 	
 	<select id="selectEmployeeAll" resultMap="resEmployee">
@@ -39,23 +59,7 @@
 	
 	<update id="updateEmployee" parameterType="Employee">
 		UPDATE EMPLOYEE
-		<set>
-			<if test="empName != null">
-				EMPNAME = #{empName},
-			</if>
-			<if test="title != null">
-				TITLE = #{title},
-			</if>
-			<if test="manager.empNo != null">
-				MANAGER = #{manager.empNo},
-			</if>
-			<if test="salary != null">
-				SALARY = #{salary},
-			</if>
-			<if test="dept.deptNo != null">
-				DNO = #{dept.deptNo}
-			</if>
-		</set>
+		<include refid="setSQL"/>
 		<include refid="whereSQL"/>
 	</update>
 	
